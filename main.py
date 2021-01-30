@@ -116,7 +116,7 @@ def update_score(actual_score, actual_high_score):
 
 
 def set_to_default():
-    global bg_surface, floor_surface, pipe_surface, fps, high_score_ability, nyan_ability, cyber_ability
+    global bg_surface, floor_surface, pipe_surface, fps, high_score_ability, nyan_ability, cyber_ability, christmas_ability, dorime_ability
     fps = 80
     bg_surface = create_and_scale('assets/background-day.png')
     floor_surface = create_and_scale('assets/base.png')
@@ -124,6 +124,15 @@ def set_to_default():
     high_score_ability = True
     nyan_ability = True
     cyber_ability = True
+    christmas_ability = True
+    dorime_ability = True
+
+
+def music_stop():
+    cyber_sound.stop()
+    nyan_sound.stop()
+    christmas_sound.stop()
+    dorime_sound.stop()
 
 
 # Game variables
@@ -138,6 +147,8 @@ can_score = True
 fps = 80
 nyan_ability = True
 cyber_ability = True
+christmas_ability = True
+dorime_ability = True
 
 pygame.init()
 screen = pygame.display.set_mode((576, 1024))
@@ -182,6 +193,8 @@ switch3_sound = pygame.mixer.Sound('sound/switch3.wav')
 high_score_sound = pygame.mixer.Sound('sound/hooray.wav')
 nyan_sound = pygame.mixer.Sound('sound/nyan.wav')
 cyber_sound = pygame.mixer.Sound('sound/cyber.wav')
+christmas_sound = pygame.mixer.Sound('sound/christmas.wav')
+dorime_sound = pygame.mixer.Sound('sound/dorime.mp3')
 
 
 while True:
@@ -231,12 +244,12 @@ while True:
                 welcome = True
                 switch1_sound.play()
 
-        if 3 <= score <= 4 and game_active:
+        if 15 <= score <= 16 and game_active:
             floor_surface = create_and_scale('assets/base.png')
             pipe_surface = create_and_scale('assets/orange-pipe.png')
             bg_surface = create_and_scale('assets/background-night.png')
 
-        if 8 <= score <= 9 and game_active:
+        if 30 <= score <= 31 and game_active:
             nyan_sound.stop()
             if cyber_ability:
                 cyber_ability = False
@@ -245,12 +258,18 @@ while True:
             pipe_surface = create_and_scale('assets/pipe-cyber.png')
             bg_surface = create_and_scale('assets/background-cyber.jpg')
 
-        if 12 <= score <= 13 and game_active:
+        if 45 <= score <= 46 and game_active:
+            cyber_sound.stop()
+            if christmas_ability:
+                christmas_ability = False
+                christmas_sound.play()
+
             floor_surface = create_and_scale('assets/winter-base.png')
             pipe_surface = create_and_scale('assets/pipe-winter-blue.png')
             bg_surface = create_and_scale('assets/winter.jpg')
 
-        if 16 <= score <= 17 and game_active:
+        if 60 <= score <= 61 and game_active:
+            christmas_sound.stop()
             if nyan_ability:
                 nyan_ability = False
                 nyan_sound.play()
@@ -258,9 +277,12 @@ while True:
             pipe_surface = create_and_scale('assets/pipe-violet.png')
             bg_surface = create_and_scale('assets/background-nyan.jpg')
 
-        if 20 <= score <= 21 and game_active:
+        if 75 <= score <= 76 and game_active:
             nyan_sound.stop()
-            floor_surface = create_and_scale('assets/winter-base.png')
+            if dorime_ability:
+                dorime_ability = False
+                dorime_sound.play(-1)
+            floor_surface = create_and_scale('assets/hell-base.png')
             pipe_surface = create_and_scale('assets/pipe-red.png')
             bg_surface = create_and_scale('assets/hell2.jpg')
 
@@ -295,8 +317,7 @@ while True:
         screen.blit(welcome_surface, welcome_rect)
 
     elif not game_active:
-        nyan_sound.stop()
-        cyber_sound.stop()
+        music_stop()
         screen.blit(game_over_surface, game_over_rect)
         high_score = update_score(score, high_score)
         score_display('game_over')
